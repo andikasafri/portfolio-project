@@ -3,6 +3,28 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import ParticlesBackground from "./ParticlesBackground";
 
+const textLines = ["Turning ideas into reality.", "Coding with passion."];
+
+const fadeUpVariants = {
+  hidden: { opacity: 0, y: -10 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, delay: 0.4 + i * 0.2 },
+  }),
+};
+
+const ctaVariants = {
+  hidden: { opacity: 0, scale: 0.95 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: { duration: 0.5, delay: 0.8 },
+  },
+  hover: { scale: 1.05 },
+  tap: { scale: 0.95 },
+};
+
 export default function HeroSection() {
   const { scrollYProgress } = useScroll();
   const backgroundOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0.8]);
@@ -10,15 +32,12 @@ export default function HeroSection() {
 
   return (
     <section className="h-screen flex flex-col items-center justify-center text-center relative">
-      {/* Particle Animation */}
       <ParticlesBackground />
 
-      {/* Hero Content */}
       <motion.div
         style={{ opacity: backgroundOpacity }}
         className="relative z-10"
       >
-        {/* Headline */}
         <motion.h1
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -28,38 +47,30 @@ export default function HeroSection() {
           Hi, I’m Andika, a passionate Software Engineer.
         </motion.h1>
 
-        {/* Short Description */}
         <motion.p className="text-lg text-gray-300 mb-8">
-          <motion.span
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-          >
-            Building scalable solutions.
-          </motion.span>
-          <br />
-          <motion.span
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.6 }}
-          >
-            Turning ideas into reality.
-          </motion.span>
-          <br />
-          <motion.span
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.8 }}
-          >
-            Coding with passion.
-          </motion.span>
+          {textLines.map((line, index) => (
+            <motion.span
+              key={index}
+              variants={fadeUpVariants}
+              initial="hidden"
+              animate="visible"
+              custom={index}
+              className="block"
+            >
+              {line}
+            </motion.span>
+          ))}
         </motion.p>
 
-        {/* Call-to-Action Button */}
         <motion.a
           style={{ opacity: buttonOpacity }}
+          variants={ctaVariants}
+          initial="hidden"
+          animate="visible"
+          whileHover="hover"
+          whileTap="tap"
           href="#about"
-          className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors transform hover:scale-105"
+          className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
         >
           Explore My Work
         </motion.a>
